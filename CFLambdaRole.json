@@ -95,7 +95,9 @@
             "Action": [
                 "codedeploy:CreateDeploymentGroup",
                 "codedeploy:CreateDeployment",
-                "codedeploy:GetDeployment"
+                "codedeploy:GetDeployment",
+				"codedeploy:DeleteDeploymentGroup",
+				"codedeploy:UpdateDeploymentGroup"
             ],
             "Resource": [
                 "arn:aws:codedeploy:ap-northeast-1:489724165018:deploymentgroup:*"
