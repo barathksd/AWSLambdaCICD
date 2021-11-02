@@ -17,7 +17,7 @@ Resources:
       DeploymentPreference:
           Type: Linear10PercentEvery1Minute
           Hooks:
-            PreTraffic: !Ref PreTrafficHook
+            BeforeAllowTraffic: !Ref PreTrafficHook
       Events:
         HelloWorldAPI:
           Type: Api

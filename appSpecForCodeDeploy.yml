@@ -3,8 +3,8 @@ Resources:
   - myLambdaFunction:
       Type: AWS::Lambda::Function
       Properties:
-        Name: "p215_ncw_barath_L"
-        Alias: "p215_ncw_barath_L_Alias"
+        Name: "p215-ncw-barath-CFlambda"
+        Alias: "live"
         CurrentVersion: "1"
         TargetVersion: "2"
 Hooks:
