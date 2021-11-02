@@ -6,6 +6,7 @@ Resources:
   P215NcwBarathLambda:
     Type: 'AWS::Serverless::Function'
     Properties:
+      FunctionName: P215NcwBarathLambda
       Handler: lambda_function.lambda_handler
       CodeUri: ./Lambda
       Runtime: python3.8
