@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: CD Demo Lambda
+
+Resources:
+  p215_ncw_barath_L:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: lambda_function.lambda_handler
+      CodeUri: ./Lambda
+      Runtime: python3.7
+      AutoPublishAlias: live
+      Description: CI/CD demo
+      MemorySize: 128
+      Timeout: 60
+      DeploymentPreference:
+        Type: Linear10PercentEveryMinute
+        Hooks:
+          PreTraffic: !Ref PreTrafficHook
+      Events:
+        !Ref HelloWorldAPI
+      
+      Environment:
+        Variables:
+          Region: !Sub {AWS::Region}
+        
+    HelloWorldAPI:
+      Type: Api
+      Properties:
+        Path: /
+        Method: get
+    
+    PreTrafficHook:
+      Type: AWS::Serverless::Function
+      Properties:
+        Handler: preTrafficHook.lambda_handler
+        Runtime: nodejs10.x
+        CodeUri: ./Lambda
+      Policies:
+        - Version: "2012-10-17"
+          Statement: 
+          - Effect: "Allow"
+            Action: 
+              - "codedeploy:PutLifecycleEventHookExecutionStatus"
+            Resource:
+              !Sub 'arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*'
+        - Version: "2012-10-17"
+          Statement: 
+          - Effect: "Allow"
+            Action: 
+              - "lambda:InvokeFunction"
+            Resource: !Ref p215_ncw_barath_L.Version
+      DeploymentPreference:
+        Enabled: false
+      Timeout: 5
+      Environment:
+        Variables:
+          NewVersion: !Ref p215_ncw_barath_L.Version        
