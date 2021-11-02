@@ -3,57 +3,30 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: CD Demo Lambda
 
 Resources:
-  P215NcwBarathLambda:
+  HelloWorld:
     Type: 'AWS::Serverless::Function'
     Properties:
-      FunctionName: P215NcwBarathLambda
       Handler: lambda_function.lambda_handler
       CodeUri: ./Lambda
       Runtime: python3.8
       AutoPublishAlias: live
-      Description: CI/CD demo
+      Description: 'Lambda function for CD Demo'
       MemorySize: 128
       Timeout: 60
       DeploymentPreference:
-        Type: Linear10PercentEveryMinute
-        Hooks:
-          PreTraffic: !Ref PreTrafficHook
+          Type: Linear10PercentEvery1Minute
+          Hooks:
+            PreTraffic: !Ref PreTrafficHook
       Events:
-        !Ref P215NcwBarathDemoAPI
-      
+        HelloWorldAPI:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
       Environment:
         Variables:
-          Region: !Sub {AWS::Region}
-
-  P215NcwBarathDemoAPI:
-    Type: "AWS::ApiGateway::RestApi"
-    Properties:
-      Name: "api"
-  Resource:
-    Type: "AWS::ApiGateway::Resource"
-    Properties:
-      RestApiId: !Ref P215NcwBarathDemoAPI
-      ParentId: !GetAtt P215NcwBarathDemoAPI.RootResourceId  
-
-  LambdaPermission:
-    Type: "AWS::Lambda::Permission"
-    Properties:
-      FunctionName: !Ref P215NcwBarathLambda
-      Action: "lambda:InvokeFunction"
-      Principal: "apigateway.amazonaws.com"
-  ResourceMethod:
-    Type: "AWS::ApiGateway::Method"
-    Properties:
-      RestApiId: !Ref P215NcwBarathDemoAPI
-      ResourceId: !Ref Resource
-      AuthorizationType: "None"
-      HttpMethod: "GET"
-      Integration:
-        Type: "AWS"
-        IntegrationHttpMethod: "GET"
-        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${P215NcwBarathLambda}/invocations"
-    DependsOn: "LambdaPermission"
-        
+          REGION: ap-northeast-1
+ 
   PreTrafficHook:
     Type: AWS::Serverless::Function
     Properties:
@@ -63,7 +36,7 @@ Resources:
       FunctionName: 'PreTrafficHook'
       Policies:
         - Version: "2012-10-17"
-          Statement:
+          Statement: 
           - Effect: "Allow"
             Action: 
               - "codedeploy:PutLifecycleEventHookExecutionStatus"
@@ -74,10 +47,10 @@ Resources:
           - Effect: "Allow"
             Action: 
               - "lambda:InvokeFunction"
-            Resource: !Ref P215NcwBarathLambda.Version
+            Resource: !Ref HelloWorld.Version
       DeploymentPreference:
         Enabled: false
       Timeout: 5
       Environment:
         Variables:
-          NewVersion: !Ref P215NcwBarathLambda.Version     
+          NewVersion: !Ref HelloWorld.Version
