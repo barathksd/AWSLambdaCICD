@@ -23,7 +23,7 @@
                 "lambda:*"
             ],
             "Resource": [
-                "arn:aws:lambda:us-west-1:489724165018:function:*"
+                "arn:aws:lambda:ap-northeast-1:489724165018:function:*"
             ],
             "Effect": "Allow"
         },
@@ -75,7 +75,7 @@
                 "cloudformation:CreateChangeSet"
             ],
             "Resource": [
-                "arn:aws:cloudformation:us-west-1:aws:transform/Serverless-2016-10-31"
+                "arn:aws:cloudformation:ap-northeast-1:aws:transform/Serverless-2016-10-31"
             ],
             "Effect": "Allow"
         },
@@ -86,7 +86,7 @@
                 "codedeploy:RegisterApplicationRevision"
             ],
             "Resource": [
-                "arn:aws:codedeploy:us-west-1:489724165018:application:*"
+                "arn:aws:codedeploy:ap-northeast-1:489724165018:application:*"
             ],
             "Effect": "Allow"
         },
@@ -97,7 +97,7 @@
                 "codedeploy:GetDeployment"
             ],
             "Resource": [
-                "arn:aws:codedeploy:us-west-1:489724165018:deploymentgroup:*"
+                "arn:aws:codedeploy:ap-northeast-1:489724165018:deploymentgroup:*"
             ],
             "Effect": "Allow"
         },
@@ -106,7 +106,7 @@
                 "codedeploy:GetDeploymentConfig"
             ],
             "Resource": [
-                "arn:aws:codedeploy:us-west-1:489724165018:deploymentconfig:*"
+                "arn:aws:codedeploy:ap-northeast-1:489724165018:deploymentconfig:*"
             ],
             "Effect": "Allow"
         }
