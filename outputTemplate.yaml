@@ -6,7 +6,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_function.lambda_handler
-      CodeUri: s3://sample-aws-codepipeline-bucket/b2233d8a2ae63fc2fbc1769dbc263fd5
+      FunctionName: p215-ncw-barath-CFlambda
+      CodeUri: s3://sample-aws-codepipeline-bucket/014b8bdc8ea5609cb0d04f56a4e7f170
       Runtime: python3.8
       AutoPublishAlias: live
       Description: Lambda function for CD Demo
@@ -31,7 +32,7 @@ Resources:
     Properties:
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
-      CodeUri: s3://sample-aws-codepipeline-bucket/b2233d8a2ae63fc2fbc1769dbc263fd5
+      CodeUri: s3://sample-aws-codepipeline-bucket/014b8bdc8ea5609cb0d04f56a4e7f170
       FunctionName: PreTrafficHook
       Policies:
       - Version: '2012-10-17'
@@ -40,7 +41,7 @@ Resources:
           Action:
           - codedeploy:PutLifecycleEventHookExecutionStatus
           Resource:
-            Fn::Sub: arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*
+            Fn::Sub: arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:*
       - Version: '2012-10-17'
         Statement:
         - Effect: Allow
