@@ -34,7 +34,7 @@ Resources:
     Properties:
       RestApiId: !Ref P215NcwBarathDemoAPI
       ParentId: !GetAtt P215NcwBarathDemoAPI.RootResourceId  
-      PathPart: !Ref P215NcwBarathLambda
+
   LambdaPermission:
     Type: "AWS::Lambda::Permission"
     Properties:
