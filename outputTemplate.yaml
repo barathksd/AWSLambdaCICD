@@ -2,67 +2,36 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: CD Demo Lambda
 Resources:
-  P215NcwBarathLambda:
+  HelloWorld:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: P215NcwBarathLambda
       Handler: lambda_function.lambda_handler
-      CodeUri: s3://sample-aws-codepipeline-bucket/c423e1a976fae29e4fd46930592858b6
+      CodeUri: s3://sample-aws-codepipeline-bucket/b2233d8a2ae63fc2fbc1769dbc263fd5
       Runtime: python3.8
       AutoPublishAlias: live
-      Description: CI/CD demo
+      Description: Lambda function for CD Demo
       MemorySize: 128
       Timeout: 60
       DeploymentPreference:
-        Type: Linear10PercentEveryMinute
+        Type: Linear10PercentEvery1Minute
         Hooks:
           PreTraffic:
             Ref: PreTrafficHook
       Events:
-        Ref: P215NcwBarathDemoAPI
+        HelloWorldAPI:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
       Environment:
         Variables:
-          Region: ap-northeast-1
-  P215NcwBarathDemoAPI:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: api
-  Resource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      RestApiId:
-        Ref: P215NcwBarathDemoAPI
-      ParentId:
-        Fn::GetAtt:
-        - P215NcwBarathDemoAPI
-        - RootResourceId
-  LambdaPermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: P215NcwBarathLambda
-      Action: lambda:InvokeFunction
-      Principal: apigateway.amazonaws.com
-  ResourceMethod:
-    Type: AWS::ApiGateway::Method
-    Properties:
-      RestApiId:
-        Ref: P215NcwBarathDemoAPI
-      ResourceId:
-        Ref: Resource
-      AuthorizationType: None
-      HttpMethod: GET
-      Integration:
-        Type: AWS
-        IntegrationHttpMethod: GET
-        Uri:
-          Fn::Sub: arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:${AWS::AccountId}:function:${P215NcwBarathLambda}/invocations
-    DependsOn: LambdaPermission
+          REGION: ap-northeast-1
   PreTrafficHook:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
-      CodeUri: s3://sample-aws-codepipeline-bucket/c423e1a976fae29e4fd46930592858b6
+      CodeUri: s3://sample-aws-codepipeline-bucket/b2233d8a2ae63fc2fbc1769dbc263fd5
       FunctionName: PreTrafficHook
       Policies:
       - Version: '2012-10-17'
@@ -71,18 +40,18 @@ Resources:
           Action:
           - codedeploy:PutLifecycleEventHookExecutionStatus
           Resource:
-            Fn::Sub: arn:aws:codedeploy:ap-northeast-1:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*
+            Fn::Sub: arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*
       - Version: '2012-10-17'
         Statement:
         - Effect: Allow
           Action:
           - lambda:InvokeFunction
           Resource:
-            Ref: P215NcwBarathLambda.Version
+            Ref: HelloWorld.Version
       DeploymentPreference:
         Enabled: false
       Timeout: 5
       Environment:
         Variables:
           NewVersion:
-            Ref: P215NcwBarathLambda.Version
+            Ref: HelloWorld.Version
