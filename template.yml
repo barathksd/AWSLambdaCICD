@@ -23,36 +23,60 @@ Resources:
       Environment:
         Variables:
           Region: !Sub {AWS::Region}
+
+  p215_ncw_barath_demoAPI:
+    Type: "AWS::ApiGateway::RestApi"
+    Properties:
+      Name: "api"
+  Resource:
+    Type: "AWS::ApiGateway::Resource"
+    Properties:
+      RestApiId: !Ref p215_ncw_barath_demoAPI
+      ParentId: !GetAtt p215_ncw_barath_demoAPI.RootResourceId  
+      PathPart: !Ref p215_ncw_barath_L
+  LambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: !Ref p215_ncw_barath_L
+      Action: "lambda:InvokeFunction"
+      Principal: "apigateway.amazonaws.com"
+  ResourceMethod:
+    Type: "AWS::ApiGateway::Method"
+    Properties:
+      RestApiId: !Ref p215_ncw_barath_demoAPI
+      ResourceId: !Ref Resource
+      AuthorizationType: "None"
+      HttpMethod: "GET"
+      Integration:
+        Type: "AWS"
+        IntegrationHttpMethod: "GET"
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${p215_ncw_barath_L}/invocations"
+    DependsOn: "LambdaPermission"
         
-    p215_ncw_barath_demoAPI:
-      Type: Api
-      Properties:
-        Path: /
-        Method: get
     
-    PreTrafficHook:
-      Type: AWS::Serverless::Function
-      Properties:
-        Handler: preTrafficHook.lambda_handler
-        Runtime: nodejs10.x
-        CodeUri: ./Lambda
-      Policies:
-        - Version: "2012-10-17"
-          Statement: 
-          - Effect: "Allow"
-            Action: 
-              - "codedeploy:PutLifecycleEventHookExecutionStatus"
-            Resource:
-              !Sub 'arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*'
-        - Version: "2012-10-17"
-          Statement: 
-          - Effect: "Allow"
-            Action: 
-              - "lambda:InvokeFunction"
-            Resource: !Ref p215_ncw_barath_L.Version
-      DeploymentPreference:
-        Enabled: false
-      Timeout: 5
-      Environment:
-        Variables:
-          NewVersion: !Ref p215_ncw_barath_L.Version        
+  PreTrafficHook:
+    Type: AWS::Serverless::Function
+    Properties:
+    Handler: preTrafficHook.lambda_handler
+    Runtime: nodejs10.x
+    CodeUri: ./Lambda
+    Policies:
+    - Version: "2012-10-17"
+      Statement: 
+      - Effect: "Allow"
+        Action: 
+          - "codedeploy:PutLifecycleEventHookExecutionStatus"
+        Resource:
+          !Sub 'arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:*'
+    - Version: "2012-10-17"
+      Statement: 
+      - Effect: "Allow"
+        Action: 
+          - "lambda:InvokeFunction"
+        Resource: !Ref p215_ncw_barath_L.Version
+    DeploymentPreference:
+    Enabled: false
+    Timeout: 5
+    Environment:
+    Variables:
+      NewVersion: !Ref p215_ncw_barath_L.Version        
