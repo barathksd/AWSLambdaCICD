@@ -7,6 +7,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: lambda_function.lambda_handler
+      FunctionName: p215-ncw-barath-CFlambda
       CodeUri: ./Lambda
       Runtime: python3.8
       AutoPublishAlias: live
@@ -41,7 +42,7 @@ Resources:
             Action: 
               - "codedeploy:PutLifecycleEventHookExecutionStatus"
             Resource:
-              !Sub 'arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*'
+              !Sub 'arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:*'
         - Version: "2012-10-17"
           Statement: 
           - Effect: "Allow"
