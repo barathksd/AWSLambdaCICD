@@ -1,6 +1,12 @@
 version: 0.0
-os: linux
-files:
-  - source: /
-    destination: /var/task
-
+Resources:
+  - myLambdaFunction:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: "p215_ncw_barath_L"
+        Alias: "p215_ncw_barath_L_Alias"
+        CurrentVersion: "1"
+        TargetVersion: "2"
+Hooks:
+  - BeforeAllowTraffic: "PreTrafficHook"
+  - AfterAllowTraffic: "PostTrafficHook"

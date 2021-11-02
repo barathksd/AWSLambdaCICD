@@ -8,7 +8,7 @@ Resources:
     Properties:
       Handler: lambda_function.lambda_handler
       CodeUri: ./Lambda
-      Runtime: python3.7
+      Runtime: python3.8
       AutoPublishAlias: live
       Description: CI/CD demo
       MemorySize: 128
@@ -18,13 +18,13 @@ Resources:
         Hooks:
           PreTraffic: !Ref PreTrafficHook
       Events:
-        !Ref HelloWorldAPI
+        !Ref p215_ncw_barath_demoAPI
       
       Environment:
         Variables:
           Region: !Sub {AWS::Region}
         
-    HelloWorldAPI:
+    p215_ncw_barath_demoAPI:
       Type: Api
       Properties:
         Path: /
