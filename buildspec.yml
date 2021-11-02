@@ -5,7 +5,7 @@ phases:
       python: 3.8
     commands:
       - aws cloudformation package --template-file template.yml --s3-bucket sample-aws-codepipeline-bucket --output-template-file outputTemplate.yaml
-      - aws cloudformation create-stack --stack-name p215-ncw-barath-lambdaStack --template-url s3://sample-aws-codepipeline-bucket/emptyStack.yml
+      - aws cloudformation create-stack --stack-name p215-ncw-barath-lambdaStack --template-url s3://sample-aws-codepipeline-bucket/emptyStack.yml || true
 artifacts:
   files:
     - template.yaml
