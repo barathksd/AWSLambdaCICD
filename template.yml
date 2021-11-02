@@ -34,7 +34,7 @@ Resources:
       Handler: lambda_function.lambda_handler
       Runtime: python3.8
       CodeUri: ./Lambda
-      FunctionName: 'PreTrafficHook'
+      FunctionName: 'CodeDeployHook_PreTrafficHook'
       Policies:
         - Version: "2012-10-17"
           Statement: 
