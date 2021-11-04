@@ -5,8 +5,8 @@ There are 4 stages in the pipeline,
 
 2. Build - CodeBuild
 	- References buildspec.yaml
-	- Create outputTemplate.yaml using template.yml
-	- Create CloudFormation Stack
+	- Creates outputTemplate.yaml using template.yml
+	- Creates empty CloudFormation Stack
 
 3. Create or replace ChangeSet (CloudFormation)
 	- references outputTemplate.yaml
