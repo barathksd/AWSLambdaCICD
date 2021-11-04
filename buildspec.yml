@@ -8,5 +8,5 @@ phases:
       - aws cloudformation create-stack --stack-name p215-ncw-barath-lambdaStack --template-url https://sample-aws-codepipeline-bucket.s3.ap-northeast-1.amazonaws.com/emptyStack.yml || true
 artifacts:
   files:
-    - template.yaml
+    - template.yml
     - outputTemplate.yaml
